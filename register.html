@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>註冊</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f5f5f5;
+    }
+    .register-container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #388E3C;
+    }
+    .login-link {
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <h2>註冊</h2>
+    <form id="registerForm">
+      <input type="text" id="username" placeholder="使用者名稱" required>
+      <input type="email" id="email" placeholder="電子郵件" required>
+      <input type="password" id="password" placeholder="密碼" required>
+      <div>
+        <label><strong>驗證碼:</strong></label>
+        <div>
+          <span id="captchaDisplay"></span>
+          <button type="button" id="refreshCaptcha">重新產生</button>
+        </div>
+        <input type="text" id="captchaInput" placeholder="輸入驗證碼" required>
+      </div>
+      <button type="submit">註冊</button>
+    </form>
+    <div class="login-link">
+      <p>已經有帳號? <a href="login.html">登入</a></p>
+    </div>
+  </div>
+
+  <script>
+    // 用於生成隨機驗證碼
+    function generateCaptcha() {
+      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let captcha = '';
+      for (let i = 0; i < 6; i++) {
+        captcha += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      document.getElementById('captchaDisplay').textContent = captcha;
+      return captcha;
+    }
+
+    // 初始生成驗證碼
+    let captcha = generateCaptcha();
+
+    // 點擊按鈕重新生成驗證碼
+    document.getElementById('refreshCaptcha').addEventListener('click', function() {
+      captcha = generateCaptcha();
+    });
+
+    // 表單提交
+    document.getElementById("registerForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const email = document.getElementById("email").value;
+      const captchaInput = document.getElementById("captchaInput").value;
+
+      // 檢查驗證碼是否正確
+      if (captchaInput !== captcha) {
+        alert('驗證碼錯誤，請再試一次。');
+        return;
+      }
+
+      // 發送 POST 請求到後端
+      fetch("http://localhost:3008/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username, password, email })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('註冊失敗');
+        }
+        return response.text();
+      })
+      .then(data => {
+        console.log(data);  // 檢查返回的資料
+        alert(data);
+        if (data === "註冊成功") {
+          window.location.href = "login.html";  // 確保跳轉到正確的頁面
+        }
+      })
+      .catch(error => {
+        console.error("錯誤:", error);
+        alert("註冊過程中發生錯誤，請稍後再試");
+      });
+    });
+  </script>
+</body>
+</html>

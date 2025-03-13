@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>登入</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f5f5f5;
+    }
+    .login-container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #388E3C;
+    }
+    .register-link {
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>登入</h2>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="電子郵件" required>
+      <input type="password" id="password" placeholder="密碼" required>
+      <button type="submit">登入</button>
+    </form>
+    <div class="register-link">
+      <p>還沒有帳號? <a href="register.html">註冊</a></p>
+    </div>
+  </div>
+
+  <script>
+    // 表單提交
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      // 發送 POST 請求到後端
+      fetch("http://localhost:3008/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);  // 檢查返回的資料
+        if (data.success) {
+          alert("登入成功");
+          window.location.href = "dashboard.html";  // 登入成功後導向主頁
+        } else {
+          alert("登入失敗：" + data.message);
+        }
+      })
+      .catch(error => {
+        console.error("錯誤:", error);
+        alert("登入過程中發生錯誤，請稍後再試");
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,780 @@
+DOCTYPE.html
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>環保生活碳排放追蹤器</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "微軟正黑體", Arial, sans-serif;
+    }
+    body {
+      background-color: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 1rem;
+      /* 取消預設置中，使用 Flex 進行左右對齊 */
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .auth-buttons a {
+      color: white;
+      text-decoration: none;
+      margin-left: 1rem;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
+    .auth-buttons a:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+    nav {
+      background-color: #388E3C;
+      display: flex;
+      justify-content: center;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      padding: 1rem;
+      display: inline-block;
+    }
+    nav a:hover {
+      background-color: #2E7D32;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .card {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    h2 {
+      color: #388E3C;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #4CAF50;
+      padding-bottom: 0.5rem;
+    }
+    form {
+      margin-bottom: 1rem;
+    }
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    select, input {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button:hover {
+      background-color: #388E3C;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 0.7rem;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .plant-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+    .plant-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .plant-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+    .stat-box {
+      background-color: #E8F5E9;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      margin: 0 0.5rem;
+    }
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #388E3C;
+    }
+    .daily-task {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .task-checkbox {
+      margin-right: 1rem;
+      width: auto;
+    }
+    .section {
+      display: none;
+    }
+    .section.active {
+      display: block;
+    }
+    #exchangeSection .exchange-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+      padding: 1rem 0;
+    }
+    #exchangeSection .exchange-item img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 1rem;
+    }
+    #exchangeSection .item-details {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <h1>環保生活碳排放追蹤器</h1>
+      <div class="auth-buttons">
+        <a href="login.html" class="login-btn">登入</a>
+        <a href="register.html" class="register-btn">註冊</a>
+    </div>
+  </header>
+  <div id="register-page"></div>
+
+  <nav>
+    <a href="#" onclick="showSection('calculatorSection')">碳排放計算</a>
+    <a href="#" onclick="showSection('recordSection')">記錄查詢</a>
+    <a href="#" onclick="showSection('exchangeSection')">積分兌換</a>
+    <a href="#" onclick="showSection('plantSection')">植物寶典</a>
+    <a href="#" onclick="showSection('taskSection')">每日任務</a>
+  </nav>
+  <!-- 引入 Vite 打包生成的 React 應用程式 -->
+  <script type="module" src="/main.jsx"></script>
+  <div class="container">
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number" id="totalCarbonStat">0</div>
+                <div>總碳排放量 (kg)</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="pointsStat">0</div>
+                <div>可用積分</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="plantsCollectedStat">0</div>
+                <div>已收集植物</div>
+            </div>
+        </div>
+        
+        <!-- 碳排放計算區塊 -->
+        <div id="calculatorSection" class="section active card">
+            <h2>碳排放計算</h2>
+            <form id="calculatorForm">
+                <div class="form-group">
+                    <label for="itemType">選擇項目:</label>
+                    <select id="itemType" required>
+                        <option value="">請選擇項目</option>
+                        <option value="cup">紙杯</option>
+                        <option value="bag">塑膠袋</option>
+                        <option value="spoon">塑膠湯匙</option>
+                        <option value="bottle">寶特瓶</option>
+                        <option value="straw">塑膠吸管</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="quantity">數量:</label>
+                    <input type="number" id="quantity" min="1" value="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date">日期:</label>
+                    <input type="date" id="date" required>
+                </div>
+                
+                <button type="submit">計算並記錄</button>
+            </form>
+            
+            <div id="resultArea">
+                <h3>計算結果:</h3>
+                <p id="carbonResult">請選擇項目並輸入數量進行計算。</p>
+            </div>
+        </div>
+        
+        <!-- 記錄查詢區塊 -->
+        <div id="recordSection" class="section card">
+            <h2>碳排放記錄</h2>
+            
+            <div class="form-group">
+                <label for="recordDate">選擇日期:</label>
+                <input type="date" id="recordDate">
+                <button type="button" onclick="filterRecords()">查詢</button>
+            </div>
+            
+            <table id="recordTable">
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>項目</th>
+                        <th>數量</th>
+                        <th>碳排放量 (kg)</th>
+                    </tr>
+                </thead>
+                <tbody id="recordTableBody">
+                    <!-- 記錄將在這裡動態生成 -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" style="text-align: right;"><strong>總計:</strong></td>
+                        <td id="totalCarbon">0 kg</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <!-- 積分兌換區塊 -->
+        <div id="exchangeSection" class="section card">
+            <h2>積分兌換</h2>
+            <p>您目前擁有 <span id="currentPoints">0</span> 積分</p>
+            
+            <div class="exchange-item">
+                <div>🌱</div>
+                <div class="item-details">
+                    <h3>蘋果樹</h3>
+                    <p>每年可吸收約20kg二氧化碳</p>
+                </div>
+                <div>
+                    <span>30 積分</span>
+                    <button onclick="exchangePlant('apple-tree', 30, '🍎')">兌換</button>
+                </div>
+            </div>
+            
+            <div class="exchange-item">
+                <div>🌱</div>
+                <div class="item-details">
+                    <h3>橡樹</h3>
+                    <p>每年可吸收約40kg二氧化碳</p>
+                </div>
+                <div>
+                    <span>50 積分</span>
+                    <button onclick="exchangePlant('oak-tree', 50, '🌳')">兌換</button>
+                </div>
+            </div>
+            
+            <div class="exchange-item">
+                <div>🌱</div>
+                <div class="item-details">
+                    <h3>向日葵</h3>
+                    <p>美麗的花朵能淨化空氣</p>
+                </div>
+                <div>
+                    <span>10 積分</span>
+                    <button onclick="exchangePlant('sunflower', 10, '🌻')">兌換</button>
+                </div>
+            </div>
+            
+            <div class="exchange-item">
+                <div>🌱</div>
+                <div class="item-details">
+                    <h3>松樹</h3>
+                    <p>每年可吸收約30kg二氧化碳</p>
+                </div>
+                <div>
+                    <span>40 積分</span>
+                    <button onclick="exchangePlant('pine-tree', 40, '🌲')">兌換</button>
+                </div>
+            </div>
+            
+            <div class="exchange-item">
+                <div>🌱</div>
+                <div class="item-details">
+                    <h3>竹子</h3>
+                    <p>生長快速，吸收二氧化碳能力強</p>
+                </div>
+                <div>
+                    <span>20 積分</span>
+                    <button onclick="exchangePlant('bamboo', 20, '🎋')">兌換</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 植物寶典區塊 -->
+        <div id="plantSection" class="section card">
+            <h2>植物寶典</h2>
+            <p>已收集: <span id="plantCount">0</span>/5</p>
+            
+            <div class="plant-grid" id="plantGrid">
+                <!-- 植物將在這裡動態生成 -->
+            </div>
+        </div>
+        
+        <!-- 每日任務區塊 -->
+        <div id="taskSection" class="section card">
+            <h2>每日任務</h2>
+            <p>完成任務獲得額外積分！</p>
+            
+            <div class="daily-task">
+                <input type="checkbox" id="task1" class="task-checkbox" onchange="updateTaskProgress()">
+                <label for="task1">輸入三筆資料 (0/3)</label>
+            </div>
+            
+            <div class="daily-task">
+                <input type="checkbox" id="task2" class="task-checkbox" onchange="updateTaskProgress()">
+                <label for="task2">減少使用5個紙杯 (0/5)</label>
+            </div>
+            
+            <div class="daily-task">
+                <input type="checkbox" id="task3" class="task-checkbox" onchange="updateTaskProgress()">
+                <label for="task3">一天不使用塑膠袋</label>
+            </div>
+            
+            <div>
+                <p>今日任務完成: <span id="taskProgress">0</span>/3</p>
+                <button id="claimTaskReward" disabled onclick="claimTaskReward()">領取獎勵 (1 積分)</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 初始化頁面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 設定今天日期為預設值
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+            document.getElementById('recordDate').value = today;
+            
+            // 從本地儲存中載入資料
+            loadFromLocalStorage();
+            
+            // 更新統計數據
+            updateStats();
+            
+            // 更新植物寶典
+            updatePlantCollection();
+            
+            // 更新記錄表格
+            filterRecords();
+        });
+        
+        // 碳排放數據 (kg/單位)
+        const carbonData = {
+            'cup': 0.01, // 紙杯
+            'bag': 0.006, // 塑膠袋
+            'spoon': 0.005, // 塑膠湯匙
+            'bottle': 0.08, // 寶特瓶
+            'straw': 0.0005 // 塑膠吸管
+        };
+        
+        // 項目名稱對照表
+        const itemNames = {
+            'cup': '紙杯',
+            'bag': '塑膠袋',
+            'spoon': '塑膠湯匙',
+            'bottle': '寶特瓶',
+            'straw': '塑膠吸管'
+        };
+        
+        // 植物對照表
+        const plants = {
+            'apple-tree': {
+                name: '蘋果樹',
+                icon: '🍎',
+                description: '每年可吸收約20kg二氧化碳'
+            },
+            'oak-tree': {
+                name: '橡樹',
+                icon: '🌳',
+                description: '每年可吸收約40kg二氧化碳'
+            },
+            'sunflower': {
+                name: '向日葵',
+                icon: '🌻',
+                description: '美麗的花朵能淨化空氣'
+            },
+            'pine-tree': {
+                name: '松樹',
+                icon: '🌲',
+                description: '每年可吸收約30kg二氧化碳'
+            },
+            'bamboo': {
+                name: '竹子',
+                icon: '🎋',
+                description: '生長快速，吸收二氧化碳能力強'
+            }
+        };
+        
+        // 用戶資料
+        let userData = {
+            records: [],
+            totalCarbon: 0,
+            points: 0,
+            plants: {},
+            dailyEntries: 0,
+            taskRewardClaimed: false,
+            lastTaskDate: ''
+        };
+        
+        // 監聽計算表單提交
+        document.getElementById('calculatorForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const itemType = document.getElementById('itemType').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const date = document.getElementById('date').value;
+            
+            if (!itemType || !quantity || !date) {
+                alert('請填寫所有欄位');
+                return;
+            }
+            
+            // 計算碳排放
+            const carbonEmission = calculateCarbon(itemType, quantity);
+            
+            // 顯示結果
+            document.getElementById('carbonResult').textContent = 
+                `使用 ${quantity} 個${itemNames[itemType]}產生了 ${carbonEmission.toFixed(3)} kg 的碳排放。`;
+            
+            // 保存記錄
+            saveRecord(date, itemType, quantity, carbonEmission);
+            
+            // 更新統計
+            updateStats();
+            
+            // 檢查每日任務進度
+            checkDailyTaskProgress();
+        });
+        
+        // 計算碳排放
+        function calculateCarbon(itemType, quantity) {
+            return carbonData[itemType] * quantity;
+        }
+        
+        // 保存記錄
+        function saveRecord(date, itemType, quantity, carbonEmission) {
+            const record = {
+                date: date,
+                itemType: itemType,
+                itemName: itemNames[itemType],
+                quantity: quantity,
+                carbon: carbonEmission
+            };
+            
+            userData.records.push(record);
+            userData.totalCarbon += carbonEmission;
+            userData.points += Math.floor(carbonEmission);
+            
+            // 檢查今天的數據輸入次數
+            const today = new Date().toISOString().split('T')[0];
+            if (date === today) {
+                userData.dailyEntries++;
+            }
+            
+            // 保存到本地儲存
+            saveToLocalStorage();
+            
+            // 更新表格
+            filterRecords();
+        }
+        
+        // 過濾記錄
+        function filterRecords() {
+            const dateFilter = document.getElementById('recordDate').value;
+            const tbody = document.getElementById('recordTableBody');
+            tbody.innerHTML = '';
+            
+            let totalFilteredCarbon = 0;
+            
+            userData.records.forEach(record => {
+                if (!dateFilter || record.date === dateFilter) {
+                    const row = document.createElement('tr');
+                    
+                    const dateCell = document.createElement('td');
+                    dateCell.textContent = record.date;
+                    row.appendChild(dateCell);
+                    
+                    const itemCell = document.createElement('td');
+                    itemCell.textContent = record.itemName;
+                    row.appendChild(itemCell);
+                    
+                    const quantityCell = document.createElement('td');
+                    quantityCell.textContent = record.quantity;
+                    row.appendChild(quantityCell);
+                    
+                    const carbonCell = document.createElement('td');
+                    carbonCell.textContent = record.carbon.toFixed(3) + ' kg';
+                    row.appendChild(carbonCell);
+                    
+                    tbody.appendChild(row);
+                    
+                    totalFilteredCarbon += record.carbon;
+                }
+            });
+            
+            document.getElementById('totalCarbon').textContent = totalFilteredCarbon.toFixed(3) + ' kg';
+        }
+        
+        // 兌換植物
+        function exchangePlant(plantId, cost, icon) {
+            if (userData.points < cost) {
+                alert('積分不足！');
+                return;
+            }
+            
+            userData.points -= cost;
+            
+            if (!userData.plants[plantId]) {
+                userData.plants[plantId] = {
+                    id: plantId,
+                    count: 1,
+                    name: plants[plantId].name,
+                    icon: plants[plantId].icon,
+                    description: plants[plantId].description
+                };
+            } else {
+                userData.plants[plantId].count++;
+            }
+            
+            // 保存到本地儲存
+            saveToLocalStorage();
+            
+            // 更新統計和植物寶典
+            updateStats();
+            updatePlantCollection();
+            
+            alert(`成功兌換 ${plants[plantId].name}！`);
+        }
+        
+        // 更新植物寶典
+        function updatePlantCollection() {
+            const grid = document.getElementById('plantGrid');
+            grid.innerHTML = '';
+            
+            // 先顯示已收集的植物
+            for (const plantId in userData.plants) {
+                const plant = userData.plants[plantId];
+                
+                const card = document.createElement('div');
+                card.className = 'plant-card';
+                
+                const icon = document.createElement('div');
+                icon.className = 'plant-icon';
+                icon.textContent = plant.icon;
+                
+                const name = document.createElement('h3');
+                name.textContent = plant.name;
+                
+                const count = document.createElement('p');
+                count.textContent = `數量: ${plant.count}`;
+                
+                const desc = document.createElement('p');
+                desc.textContent = plant.description;
+                
+                card.appendChild(icon);
+                card.appendChild(name);
+                card.appendChild(count);
+                card.appendChild(desc);
+                
+                grid.appendChild(card);
+            }
+            
+            // 添加未收集的植物（半透明）
+            for (const plantId in plants) {
+                if (!userData.plants[plantId]) {
+                    const card = document.createElement('div');
+                    card.className = 'plant-card';
+                    card.style.opacity = '0.5';
+                    
+                    const icon = document.createElement('div');
+                    icon.className = 'plant-icon';
+                    icon.textContent = '❓';
+                    
+                    const name = document.createElement('h3');
+                    name.textContent = '未收集';
+                    
+                    card.appendChild(icon);
+                    card.appendChild(name);
+                    
+                    grid.appendChild(card);
+                }
+            }
+            
+            // 更新收集數量
+            const collectedCount = Object.keys(userData.plants).length;
+            document.getElementById('plantCount').textContent = collectedCount;
+        }
+        
+        // 檢查每日任務進度
+        function checkDailyTaskProgress() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // 重設任務（如果是新的一天）
+            if (userData.lastTaskDate !== today) {
+                userData.lastTaskDate = today;
+                userData.dailyEntries = countTodayEntries();
+                userData.taskRewardClaimed = false;
+                document.getElementById('task1').checked = false;
+                document.getElementById('task2').checked = false;
+                document.getElementById('task3').checked = false;
+                document.getElementById('claimTaskReward').disabled = true;
+            }
+            
+            // 更新任務1：輸入三筆資料
+            const task1 = document.getElementById('task1');
+            const entriesCount = countTodayEntries();
+            task1.nextElementSibling.textContent = `輸入三筆資料 (${Math.min(entriesCount, 3)}/3)`;
+            task1.checked = entriesCount >= 3;
+            
+            // 更新任務2：減少紙杯使用
+            const task2 = document.getElementById('task2');
+            const cupsSavedToday = countTodayItemUsage('cup');
+            task2.nextElementSibling.textContent = `減少使用5個紙杯 (${Math.min(cupsSavedToday, 5)}/5)`;
+            task2.checked = cupsSavedToday >= 5;
+            
+            // 任務3保持不變（主觀完成）
+            
+            // 更新任務進度
+            updateTaskProgress();
+            
+            // 保存到本地儲存
+            saveToLocalStorage();
+        }
+        
+        // 計算今天的資料輸入次數
+        function countTodayEntries() {
+            const today = new Date().toISOString().split('T')[0];
+            return userData.records.filter(record => record.date === today).length;
+        }
+        
+        // 計算今天某項目的使用數量
+        function countTodayItemUsage(itemType) {
+            const today = new Date().toISOString().split('T')[0];
+            return userData.records
+                .filter(record => record.date === today && record.itemType === itemType)
+                .reduce((total, record) => total + record.quantity, 0);
+        }
+        
+        // 更新任務進度
+        function updateTaskProgress() {
+            const task1 = document.getElementById('task1').checked;
+            const task2 = document.getElementById('task2').checked;
+            const task3 = document.getElementById('task3').checked;
+            
+            const completedTasks = [task1, task2, task3].filter(Boolean).length;
+            document.getElementById('taskProgress').textContent = completedTasks;
+            
+            // 啟用或禁用獎勵按鈕
+            const rewardButton = document.getElementById('claimTaskReward');
+            rewardButton.disabled = completedTasks < 3 || userData.taskRewardClaimed;
+        }
+        
+        // 領取任務獎勵
+        function claimTaskReward() {
+            if (userData.taskRewardClaimed) {
+                alert('您今天已經領取過獎勵了！');
+                return;
+            }
+            
+            userData.points += 1;
+            userData.taskRewardClaimed = true;
+            
+            // 保存到本地儲存
+            saveToLocalStorage();
+            
+            // 更新統計
+            updateStats();
+            
+            // 禁用按鈕
+            document.getElementById('claimTaskReward').disabled = true;
+            
+            alert('恭喜您獲得1點積分！');
+        }
+        
+        // 更新統計數據
+        function updateStats() {
+            document.getElementById('totalCarbonStat').textContent = userData.totalCarbon.toFixed(1);
+            document.getElementById('pointsStat').textContent = userData.points;
+            document.getElementById('currentPoints').textContent = userData.points;
+            
+            const plantsCollected = Object.keys(userData.plants).length;
+            document.getElementById('plantsCollectedStat').textContent = plantsCollected;
+        }
+        
+        // 切換區塊顯示
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            document.getElementById(sectionId).classList.add('active');
+        }
+        
+        // 保存到本地儲存
+        function saveToLocalStorage() {
+            localStorage.setItem('ecoTrackerData', JSON.stringify(userData));
+        }
+        
+        // 從本地儲存載入
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem('ecoTrackerData');
+            if (savedData) {
+                userData = JSON.parse(savedData);
+            }
+        }
+    </script>
+</body>
+</html>
