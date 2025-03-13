@@ -12,6 +12,6 @@
   },
   "devDependencies": {},
   "engines": {
-    "node": "14.x"
+    "Node.js 22"
   }
 }
